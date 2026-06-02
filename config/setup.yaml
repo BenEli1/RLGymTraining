@@ -1,0 +1,41 @@
+seed: 42
+data:
+  raw_path: data/raw/workout_sequences.csv
+  processed_dir: data/processed
+  use_synthetic_fallback: true
+  synthetic_trainees: 32
+  synthetic_days: 56
+  sequence_length: 6
+  train_ratio: 0.7
+  validation_ratio: 0.15
+  state_columns:
+    - readiness
+    - fatigue
+    - strength
+    - endurance
+    - soreness
+  action_column: action
+  trainee_column: trainee_id
+  day_column: day
+world_model:
+  hidden_size: 32
+  num_layers: 1
+  learning_rate: 0.003
+  epochs: 3
+  batch_size: 16
+rl:
+  episode_length: 28
+  gamma: 0.95
+  policy_learning_rate: 0.003
+  critic_learning_rate: 0.003
+  entropy_coefficient: 0.01
+  reinforce_episodes: 5
+  a2c_episodes: 5
+  normalize_returns: true
+reward:
+  progress_weight: 1.0
+  readiness_weight: 0.25
+  fatigue_penalty: 0.8
+  overload_penalty: 0.4
+  invalid_action_penalty: 2.0
+  consistency_bonus: 0.05
