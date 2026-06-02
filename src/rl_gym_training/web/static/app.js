@@ -83,8 +83,8 @@ const drawReturnChart = (metrics) => {
 };
 
 const drawLossChart = (metrics) => {
-  const losses = metrics["a2c_metrics.json"]?.training?.critic_losses?.slice(0, 48) || [];
-  drawLine(document.querySelector("#loss-chart"), losses, "#126f64", "Run A2C to populate critic loss");
+  const losses = metrics["world_model_metrics.json"]?.train_losses || [];
+  drawLine(document.querySelector("#loss-chart"), losses, "#126f64", "Run LSTM training to populate loss");
 };
 
 const drawBars = (canvas, values) => {

@@ -58,9 +58,18 @@ class RLGymTrainingSDK:
 
     def train_world_model(self, checkpoint_path: str | Path = "results/lstm_world_model.pt"):
         prepared = self.prepare_data()
-        return train_world_model(
+        result = train_world_model(
             prepared.train, prepared.validation, self.config, resolve_path(checkpoint_path)
         )
+        self._write_json(
+            "results/world_model_metrics.json",
+            {
+                "train_losses": result.train_losses,
+                "validation_loss": result.validation_loss,
+                "checkpoint_path": str(result.checkpoint_path),
+            },
+        )
+        return result
 
     def make_environment(self, checkpoint_path: str | Path = "results/lstm_world_model.pt"):
         prepared = self.prepare_data()

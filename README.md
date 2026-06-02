@@ -49,7 +49,7 @@ uv run ruff format --check .
 Current local validation:
 
 - `uv sync --extra dev --system-certs`: passed
-- `uv run pytest`: 12 passed
+- `uv run pytest`: 14 passed
 - `uv run ruff check .`: passed
 - `uv run ruff format --check .`: passed
 
@@ -103,6 +103,30 @@ uv run rl-gym-training dashboard
 It shows artifact status, average return comparison, loss curves, command output, and the synthetic-data caveat on the first screen. It calls the same SDK as the tests and CLI, so it does not duplicate training logic.
 
 Large generated artifacts are ignored by git.
+
+## Visual Demonstration
+
+Dashboard preview:
+
+![Browser dashboard preview](assets/dashboard_preview.png)
+
+Demo LSTM world-model training curve:
+
+![LSTM training curve](assets/lstm_training_curve.png)
+
+Synthetic fallback policy comparison:
+
+![Policy comparison](assets/policy_comparison.png)
+
+A2C evaluation action distribution:
+
+![A2C action distribution](assets/action_distribution.png)
+
+These images are generated from the current demo metrics and dashboard layout. To regenerate them after a new run:
+
+```powershell
+uv run python scripts/generate_readme_assets.py
+```
 
 ## Documentation
 

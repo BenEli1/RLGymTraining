@@ -102,6 +102,7 @@ class DashboardHandler(BaseHTTPRequestHandler):
             name: (results / name).exists()
             for name in [
                 "lstm_world_model.pt",
+                "world_model_metrics.json",
                 "reinforce_metrics.json",
                 "a2c_metrics.json",
                 "random_policy_metrics.json",
@@ -109,6 +110,7 @@ class DashboardHandler(BaseHTTPRequestHandler):
         }
         metrics = {}
         for file_name in [
+            "world_model_metrics.json",
             "reinforce_metrics.json",
             "a2c_metrics.json",
             "random_policy_metrics.json",
