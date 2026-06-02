@@ -31,18 +31,18 @@ Result from local PMData run:
 | Prepared test sequences | 174 |
 | LSTM final train loss | 0.6611 |
 | LSTM validation loss | 0.5477 |
-| REINFORCE evaluation average return | 1.7819 |
+| REINFORCE evaluation average return | 2.4954 |
 | REINFORCE safety violations | 0 |
-| A2C evaluation average return | 0.9089 |
+| A2C evaluation average return | 1.6647 |
 | A2C safety violations | 0 |
-| Random masked baseline average return | -1.0453 |
+| Random masked baseline average return | -0.8265 |
 | Random masked baseline safety violations | 0 |
-| A2C action distribution | rest 28, mixed 28 |
-| REINFORCE action distribution | rest 14, mixed 42 |
+| A2C action distribution | rest 17, cardio 37, strength 2 |
+| REINFORCE action distribution | cardio 28, mixed 28 |
 
 Interpretation: the software pipeline executes end to end on PMData-derived workout sequences and the learned policies can be compared against a random masked policy. REINFORCE achieved the highest return in this compact CPU run, while A2C still beat the random masked baseline and produced zero safety violations.
 
-Limitation: PMData is real, but the RL environment remains an educational learned simulator and not a medical recommendation engine. The deterministic A2C evaluation collapsed to a recovery-heavy mix of `rest` and `mixed` in this short run; the README plot compares that policy distribution against the PMData label distribution so this behavior is visible instead of overstated.
+Limitation: PMData is real, but the RL environment remains an educational learned simulator and not a medical recommendation engine. The policy is improved compared with the first short run, but it is still a compact coursework model and should not be interpreted as a safe real-world training plan.
 
 ## Additional Comparison Checklist
 

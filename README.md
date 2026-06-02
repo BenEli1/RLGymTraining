@@ -147,7 +147,7 @@ Add a new dataset by changing `data.raw_path` and column names in config. Add a 
 
 ## Known Limitations
 
-The project now uses PMData for the local experiment evidence, but raw PMData files are not committed because dataset files belong under ignored `data/raw/`. The LSTM world model is compact for coursework and CPU feasibility. Safety constraints are illustrative and not clinically validated. On the local PMData run, REINFORCE achieved `1.7819` average evaluation return over two short evaluation episodes, A2C achieved `0.9089`, and the random masked baseline achieved `-1.0453`; these are educational pipeline checks, not medical or production claims. The deterministic A2C evaluation is recovery-heavy (`rest`/`mixed`) after short training, which is reported as a limitation rather than hidden.
+The project now uses PMData for the local experiment evidence, but raw PMData files are not committed because dataset files belong under ignored `data/raw/`. The LSTM world model is compact for coursework and CPU feasibility. Safety constraints are illustrative and not clinically validated. On the local PMData run, REINFORCE achieved `2.4954` average evaluation return, A2C achieved `1.6647`, and the random masked baseline achieved `-0.8265`; all reported policies had zero safety violations. These are educational pipeline checks, not medical or production claims.
 
 ## References
 

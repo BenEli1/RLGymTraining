@@ -20,9 +20,9 @@ def valid_action_mask(
     values = state.detach().cpu().numpy() if isinstance(state, torch.Tensor) else state
     readiness, fatigue, _, _, soreness = values[:5]
     mask = np.ones(N_ACTIONS, dtype=bool)
-    if fatigue > 0.75 or soreness > 0.7 or readiness < 0.25:
+    if fatigue > 1.25 or soreness > 1.25 or readiness < -1.25:
         mask[[ACTION_CARDIO, ACTION_STRENGTH, ACTION_MIXED]] = False
-    if previous_action in {ACTION_STRENGTH, ACTION_MIXED} and fatigue > 0.55:
+    if previous_action in {ACTION_STRENGTH, ACTION_MIXED} and fatigue > 0.75:
         mask[[ACTION_STRENGTH, ACTION_MIXED]] = False
     mask[ACTION_REST] = True
     return mask

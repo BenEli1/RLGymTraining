@@ -78,8 +78,8 @@ def _one_hot(action: int) -> np.ndarray:
 def _action_effect(action: int) -> np.ndarray:
     effects = {
         ACTION_REST: np.array([0.03, -0.06, -0.005, -0.005, -0.05], dtype=np.float32),
-        ACTION_CARDIO: np.array([-0.01, 0.035, 0.0, 0.09, 0.02], dtype=np.float32),
-        ACTION_STRENGTH: np.array([-0.01, 0.04, 0.09, 0.0, 0.025], dtype=np.float32),
-        ACTION_MIXED: np.array([-0.02, 0.055, 0.06, 0.06, 0.035], dtype=np.float32),
+        ACTION_CARDIO: np.array([-0.01, 0.02, 0.0, 0.12, 0.01], dtype=np.float32),
+        ACTION_STRENGTH: np.array([-0.01, 0.02, 0.12, 0.0, 0.015], dtype=np.float32),
+        ACTION_MIXED: np.array([-0.02, 0.04, 0.045, 0.045, 0.025], dtype=np.float32),
     }
     return effects[action]

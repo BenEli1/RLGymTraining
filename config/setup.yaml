@@ -28,9 +28,9 @@ rl:
   gamma: 0.95
   policy_learning_rate: 0.003
   critic_learning_rate: 0.003
-  entropy_coefficient: 0.01
-  reinforce_episodes: 8
-  a2c_episodes: 12
+  entropy_coefficient: 0.03
+  reinforce_episodes: 16
+  a2c_episodes: 40
   normalize_returns: true
 reward:
   progress_weight: 1.0

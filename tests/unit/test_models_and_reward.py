@@ -66,7 +66,7 @@ def test_reward_penalizes_trivial_rest_and_action_effects_are_distinct():
 
 
 def test_action_mask_blocks_heavy_work_when_fatigued():
-    state = np.array([0.2, 0.8, 0.4, 0.4, 0.8], dtype=np.float32)
+    state = np.array([-1.5, 1.5, 0.4, 0.4, 1.5], dtype=np.float32)
     mask = valid_action_mask(state)
     assert mask[0]
     assert not mask[ACTION_STRENGTH]

@@ -10,7 +10,7 @@ Reward design: reward progress in strength/endurance/readiness and penalize fati
 
 Episode length: default 28 days in `config/setup.yaml`.
 
-Constraints and safety rules: high fatigue, high soreness, or low readiness mask intense actions. Rest remains valid.
+Constraints and safety rules: very high standardized fatigue/soreness or very low standardized readiness mask intense actions. Rest remains valid, and repeated heavy actions are blocked sooner when fatigue is already elevated.
 
 Why RL: supervised learning predicts "what happens next"; RL learns "what should the agent do next" to maximize discounted return across the episode.
 
