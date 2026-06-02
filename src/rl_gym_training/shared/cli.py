@@ -5,8 +5,6 @@ from __future__ import annotations
 import argparse
 import json
 
-from rl_gym_training.sdk import RLGymTrainingSDK
-
 
 def main() -> None:
     parser = argparse.ArgumentParser(description="RL Gym Training coursework CLI")
@@ -18,17 +16,12 @@ def main() -> None:
             "train-reinforce",
             "train-a2c",
             "evaluate-random",
-            "dashboard",
         ],
     )
-    parser.add_argument("--host", default="127.0.0.1")
-    parser.add_argument("--port", default=8765, type=int)
     args = parser.parse_args()
-    if args.command == "dashboard":
-        from rl_gym_training.web.dashboard import serve_dashboard
 
-        serve_dashboard(host=args.host, port=args.port)
-        return
+    from rl_gym_training.sdk import RLGymTrainingSDK
+
     sdk = RLGymTrainingSDK()
     if args.command == "prepare":
         prepared = sdk.prepare_data()

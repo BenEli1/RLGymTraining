@@ -98,7 +98,7 @@ def save_action_distribution() -> None:
     plt.close(fig)
 
 
-def save_dashboard_preview() -> None:
+def save_project_overview() -> None:
     fig, ax = plt.subplots(figsize=(13, 8))
     fig.patch.set_facecolor("#f4f6f3")
     ax.set_xlim(0, 100)
@@ -107,9 +107,16 @@ def save_dashboard_preview() -> None:
 
     ax.text(5, 93, "Exercise 3", color="#126f64", fontsize=12, weight="bold")
     ax.text(5, 84, "RLGymTraining", color="#17211b", fontsize=34, weight="bold")
-    ax.add_patch(_rounded(82, 84, 13, 6, "#ffffff", "#d9dfd8"))
+    ax.add_patch(_rounded(75, 84, 20, 6, "#ffffff", "#d9dfd8"))
     ax.text(
-        88.5, 87, "Ready", ha="center", va="center", fontsize=12, weight="bold", color="#607066"
+        85,
+        87,
+        "CLI + SDK",
+        ha="center",
+        va="center",
+        fontsize=12,
+        weight="bold",
+        color="#607066",
     )
 
     cards = [
@@ -124,8 +131,8 @@ def save_dashboard_preview() -> None:
         ax.text(x + 2, 76.5, label, color="#607066", fontsize=10)
         ax.text(x + 2, 72.5, value, color="#17211b", fontsize=13, weight="bold")
 
-    buttons = ["Prepare Data", "Train LSTM", "Train REINFORCE", "Train A2C", "Random Baseline"]
-    for index, label in enumerate(buttons):
+    steps = ["prepare", "train-lstm", "train-reinforce", "train-a2c", "evaluate-random"]
+    for index, label in enumerate(steps):
         x = 5 + index * 18.7
         ax.add_patch(_rounded(x, 62, 16.5, 5.5, "#126f64", "#0d5d53"))
         ax.text(
@@ -148,19 +155,19 @@ def save_dashboard_preview() -> None:
     _mini_line(ax, 57, 36, [45, 22, 13], "#126f64")
 
     ax.add_patch(_rounded(5, 6, 90, 22, "#ffffff", "#d9dfd8"))
-    ax.text(8, 24, "Run Log", fontsize=13, weight="bold", color="#17211b")
+    ax.text(8, 24, "Required Outputs", fontsize=13, weight="bold", color="#17211b")
     ax.add_patch(Rectangle((8, 9), 84, 13, facecolor="#111915", edgecolor="#111915"))
     ax.text(
         10,
         19,
-        "{ command: train-a2c, ok: true, evaluation: { average_return: 1.0101 } }",
+        "results/lstm_world_model.pt  |  reinforce_metrics.json  |  a2c_metrics.json",
         color="#eaf4ee",
         fontsize=10,
         family="monospace",
     )
 
     fig.tight_layout()
-    fig.savefig(ASSETS / "dashboard_preview.png", dpi=160)
+    fig.savefig(ASSETS / "project_overview.png", dpi=160)
     plt.close(fig)
 
 
@@ -197,7 +204,7 @@ def _mini_line(ax, x: float, y: float, values: list[float], color: str) -> None:
 
 def main() -> None:
     ASSETS.mkdir(exist_ok=True)
-    save_dashboard_preview()
+    save_project_overview()
     save_policy_comparison()
     save_lstm_curve()
     save_action_distribution()

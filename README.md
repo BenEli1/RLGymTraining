@@ -33,10 +33,7 @@ uv run rl-gym-training train-lstm
 uv run rl-gym-training train-reinforce
 uv run rl-gym-training train-a2c
 uv run rl-gym-training evaluate-random
-uv run rl-gym-training dashboard
 ```
-
-The dashboard opens at `http://127.0.0.1:8765` by default and provides browser buttons for data preparation, LSTM training, REINFORCE, A2C, and random-policy evaluation. It is intentionally implemented as a lightweight web UI rather than Tkinter.
 
 Quality checks:
 
@@ -49,7 +46,7 @@ uv run ruff format --check .
 Current local validation:
 
 - `uv sync --extra dev --system-certs`: passed
-- `uv run pytest`: 14 passed
+- `uv run pytest`: 12 passed
 - `uv run ruff check .`: passed
 - `uv run ruff format --check .`: passed
 
@@ -92,23 +89,11 @@ All important hyperparameters live in `config/setup.yaml`: data path, split rati
 - `results/a2c_metrics.json`
 - `results/random_policy_metrics.json`
 
-## Browser Dashboard
-
-The dashboard is the recommended visual demo path for the course submission:
-
-```powershell
-uv run rl-gym-training dashboard
-```
-
-It shows artifact status, average return comparison, loss curves, command output, and the synthetic-data caveat on the first screen. It calls the same SDK as the tests and CLI, so it does not duplicate training logic.
-
-Large generated artifacts are ignored by git.
-
 ## Visual Demonstration
 
-Dashboard preview:
+Project workflow overview:
 
-![Browser dashboard preview](assets/dashboard_preview.png)
+![Project workflow overview](assets/project_overview.png)
 
 Demo LSTM world-model training curve:
 
@@ -122,7 +107,7 @@ A2C evaluation action distribution:
 
 ![A2C action distribution](assets/action_distribution.png)
 
-These images are generated from the current demo metrics and dashboard layout. To regenerate them after a new run:
+These images are generated from the current demo metrics and project workflow. To regenerate them after a new run:
 
 ```powershell
 uv run python scripts/generate_readme_assets.py
