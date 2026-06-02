@@ -8,7 +8,8 @@ This matrix maps the Exercise 3 requirements to concrete repository evidence.
 | Agent, state, action, reward, episode, policy, return, advantage, critic defined | `README.md`, `docs/PRD_problem_formulation.md`, `docs/PRD_a2c.md` | PASS |
 | Clean data pipeline, no hardcoded absolute paths | `src/rl_gym_training/data/`, `config/setup.yaml`, tests | PASS |
 | Chronological split and train-only scaling | `src/rl_gym_training/data/preprocessing.py`, `tests/unit/test_config_seed_data.py` | PASS |
-| Synthetic fallback clearly marked | `README.md`, `docs/PRD_data_pipeline.md`, `docs/EXPERIMENTS.md` | PASS |
+| Real Kaggle-listed dataset workflow | `scripts/download_pmdata.py`, `docs/PMDATA_DATASET.md`, `docs/EXPERIMENTS.md` | PASS |
+| Synthetic fallback clearly marked and disabled by default | `config/setup.yaml`, `README.md`, `docs/PRD_data_pipeline.md` | PASS |
 | Separate LSTM world model | `src/rl_gym_training/models/lstm_world_model.py`, `docs/PRD_lstm_world_model.md` | PASS |
 | REINFORCE policy-gradient implementation | `src/rl_gym_training/rl/reinforce.py`, `docs/PRD_reinforce.md`, tests | PASS |
 | A2C Actor-Critic implementation | `src/rl_gym_training/rl/a2c.py`, `docs/PRD_a2c.md`, tests | PASS |

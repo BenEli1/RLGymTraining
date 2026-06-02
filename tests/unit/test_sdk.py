@@ -13,6 +13,7 @@ def test_sdk_prepare_and_random_evaluation_flow(tmp_path):
         synthetic_trainees=3,
         synthetic_days=14,
         sequence_length=3,
+        use_synthetic_fallback=True,
     )
     fast_config = replace(
         config,

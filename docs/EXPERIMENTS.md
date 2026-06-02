@@ -1,16 +1,17 @@
 # Experiments
 
-No real Kaggle experiment has been run yet because the repository currently does not contain the dataset. Do not claim Kaggle results from synthetic data.
+The local experiment uses PMData, a real Kaggle-listed sports logging dataset. Raw files are downloaded from the public OSF mirror with `scripts/download_pmdata.py` because Kaggle API credentials are not stored in this repository.
 
 ## Demo Pipeline Check
 
 Hypothesis: the code path can prepare data, train a compact LSTM, train policy-gradient agents, and write metrics.
 
-Setup/config: `config/setup.yaml`, synthetic fallback enabled, short episode counts for CPU feasibility.
+Setup/config: `config/setup.yaml`, PMData generated at `data/raw/workout_sequences.csv`, short episode counts for CPU feasibility.
 
 Commands:
 
 ```powershell
+uv run python scripts/download_pmdata.py
 uv run rl-gym-training train-lstm
 uv run rl-gym-training train-reinforce
 uv run rl-gym-training train-a2c
@@ -19,27 +20,29 @@ uv run rl-gym-training evaluate-random
 
 Metrics: LSTM validation loss, average episode return, safety violations, action distribution.
 
-Result from local synthetic fallback run:
+Result from local PMData run:
 
 | Item | Result |
 |---|---:|
-| Prepared train sequences | 1056 |
-| Prepared validation sequences | 64 |
-| Prepared test sequences | 96 |
-| LSTM final train loss | 0.0798 |
-| LSTM validation loss | 0.1038 |
-| REINFORCE evaluation average return | 0.2733 |
+| PMData rows | 1747 |
+| PMData participants | 16 |
+| Prepared train sequences | 1119 |
+| Prepared validation sequences | 166 |
+| Prepared test sequences | 174 |
+| LSTM final train loss | 0.6611 |
+| LSTM validation loss | 0.5477 |
+| REINFORCE evaluation average return | 1.7819 |
 | REINFORCE safety violations | 0 |
-| A2C evaluation average return | 0.8064 |
+| A2C evaluation average return | 0.9089 |
 | A2C safety violations | 0 |
-| Random masked baseline average return | -1.9374 |
+| Random masked baseline average return | -1.0453 |
 | Random masked baseline safety violations | 0 |
-| A2C action distribution | rest 15, cardio 41 |
-| REINFORCE action distribution | rest 13, cardio 33, mixed 10 |
+| A2C action distribution | rest 28, mixed 28 |
+| REINFORCE action distribution | rest 14, mixed 42 |
 
 Interpretation: the software pipeline executes end to end and the learned policies can be compared against a random masked policy. A2C performed best in this very small synthetic run, which is plausible because the critic supplies lower-variance TD feedback.
 
-Limitation: synthetic data validates software behavior only.
+Limitation: PMData is real, but the RL environment remains an educational learned simulator and not a medical recommendation engine.
 
 ## Planned Comparisons
 

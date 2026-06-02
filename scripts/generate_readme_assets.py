@@ -12,6 +12,7 @@ from matplotlib.patches import FancyBboxPatch, Rectangle
 ROOT = Path(__file__).resolve().parents[1]
 ASSETS = ROOT / "assets"
 RESULTS = ROOT / "results"
+MANIFEST = ROOT / "data" / "raw" / "pmdata_manifest.json"
 
 
 def load_json(name: str) -> dict[str, Any]:
@@ -117,6 +118,8 @@ def save_project_overview() -> None:
         ]
         if value is not None
     )
+    manifest = load_manifest()
+    data_mode = "PMData real dataset" if manifest else "Synthetic fallback"
 
     fig, ax = plt.subplots(figsize=(13, 8))
     fig.patch.set_facecolor("#f4f6f3")
@@ -139,7 +142,7 @@ def save_project_overview() -> None:
     )
 
     cards = [
-        ("Data mode", "Synthetic fallback"),
+        ("Data mode", data_mode),
         ("LSTM checkpoint", "Available"),
         ("Best demo return", f"{best_return:.4f}"),
         ("Safety violations", str(safety_violations)),
@@ -188,6 +191,12 @@ def save_project_overview() -> None:
     fig.tight_layout()
     fig.savefig(ASSETS / "project_overview.png", dpi=160)
     plt.close(fig)
+
+
+def load_manifest() -> dict[str, Any]:
+    if not MANIFEST.exists():
+        return {}
+    return json.loads(MANIFEST.read_text(encoding="utf-8"))
 
 
 def _rounded(

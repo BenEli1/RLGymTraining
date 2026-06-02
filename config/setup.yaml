@@ -2,7 +2,7 @@ seed: 42
 data:
   raw_path: data/raw/workout_sequences.csv
   processed_dir: data/processed
-  use_synthetic_fallback: true
+  use_synthetic_fallback: false
   synthetic_trainees: 32
   synthetic_days: 56
   sequence_length: 6

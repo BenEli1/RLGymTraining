@@ -28,6 +28,7 @@ uv sync --extra dev
 ## Commands
 
 ```powershell
+uv run python scripts/download_pmdata.py
 uv run rl-gym-training prepare
 uv run rl-gym-training train-lstm
 uv run rl-gym-training train-reinforce
@@ -52,7 +53,13 @@ Current local validation:
 
 ## Data
 
-The preferred workflow is to place a real chronological workout dataset at `data/raw/workout_sequences.csv`. Required columns are documented in [docs/PRD_data_pipeline.md](docs/PRD_data_pipeline.md). If that file is missing, the code creates a small synthetic fallback dataset for demos and tests only. It is clearly marked as synthetic and should not be presented as Kaggle results.
+The preferred workflow uses PMData, a real Kaggle-listed sports logging dataset. Download and adapt the needed PMData wellness/sRPE CSV files with:
+
+```powershell
+uv run python scripts/download_pmdata.py
+```
+
+This creates `data/raw/workout_sequences.csv` from 16 PMData participants. Required columns are documented in [docs/PRD_data_pipeline.md](docs/PRD_data_pipeline.md). Synthetic fallback exists only for tests and explicit demo use; it is disabled in the default config.
 
 Processed chronological splits are saved under `data/processed/`. Scaling is fitted only on training rows and then applied to validation/test rows.
 
@@ -126,6 +133,7 @@ uv run python scripts/generate_readme_assets.py
 - [docs/PRD_a2c.md](docs/PRD_a2c.md)
 - [docs/EXPERIMENTS.md](docs/EXPERIMENTS.md)
 - [docs/ASSESSMENT_COVERAGE.md](docs/ASSESSMENT_COVERAGE.md)
+- [docs/PMDATA_DATASET.md](docs/PMDATA_DATASET.md)
 - [docs/AI_WORKFLOW.md](docs/AI_WORKFLOW.md)
 - [docs/COST_ANALYSIS.md](docs/COST_ANALYSIS.md)
 - [docs/VERSION_HISTORY.md](docs/VERSION_HISTORY.md)
@@ -136,7 +144,7 @@ Add a new dataset by changing `data.raw_path` and column names in config. Add a 
 
 ## Known Limitations
 
-The current repository does not include a real Kaggle dataset, so local demo runs use synthetic data unless the user provides CSV data. The LSTM world model is compact for coursework and CPU feasibility. Safety constraints are illustrative and not clinically validated. Results from demo data should be described as educational pipeline checks only. On the local synthetic fallback, A2C achieved `0.8064` average evaluation return over two short evaluation episodes, REINFORCE achieved `0.2733`, and the random masked baseline achieved `-1.9374`; these are pipeline checks, not scientific claims.
+The project now uses PMData for the local experiment evidence, but raw PMData files are not committed because dataset files belong under ignored `data/raw/`. The LSTM world model is compact for coursework and CPU feasibility. Safety constraints are illustrative and not clinically validated. On the local PMData run, REINFORCE achieved `1.7819` average evaluation return over two short evaluation episodes, A2C achieved `0.9089`, and the random masked baseline achieved `-1.0453`; these are educational pipeline checks, not medical or production claims.
 
 ## References
 

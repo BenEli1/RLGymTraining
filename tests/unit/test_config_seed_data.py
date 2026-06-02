@@ -31,7 +31,12 @@ def test_seed_reproducibility_for_synthetic_data():
 def test_loader_uses_synthetic_fallback_when_csv_missing(tmp_path):
     config = load_config()
     data_config = config.data.__class__(
-        **{**config.data.__dict__, "raw_path": tmp_path / "missing.csv", "synthetic_trainees": 2}
+        **{
+            **config.data.__dict__,
+            "raw_path": tmp_path / "missing.csv",
+            "synthetic_trainees": 2,
+            "use_synthetic_fallback": True,
+        }
     )
     frame = load_workout_data(data_config, seed=1)
     assert not frame.empty
