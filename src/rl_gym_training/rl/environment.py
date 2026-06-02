@@ -7,7 +7,13 @@ from collections import deque
 import numpy as np
 import torch
 
-from rl_gym_training.data.data_loader import N_ACTIONS
+from rl_gym_training.data.data_loader import (
+    ACTION_CARDIO,
+    ACTION_MIXED,
+    ACTION_REST,
+    ACTION_STRENGTH,
+    N_ACTIONS,
+)
 from rl_gym_training.models.lstm_world_model import LSTMWorldModel
 from rl_gym_training.rl.action_masking import valid_action_mask
 from rl_gym_training.rl.reward import RewardFunction
@@ -49,7 +55,10 @@ class WorkoutWorldModelEnv:
         sequence = torch.tensor(np.stack(self.history), dtype=torch.float32).unsqueeze(0)
         sequence[0, -1, len(self.state) :] = torch.tensor(_one_hot(action), dtype=torch.float32)
         with torch.no_grad():
-            next_state = self.world_model(sequence).squeeze(0).cpu().numpy().astype(np.float32)
+            model_prediction = (
+                self.world_model(sequence).squeeze(0).cpu().numpy().astype(np.float32)
+            )
+        next_state = 0.75 * self.state + 0.25 * model_prediction + _action_effect(action)
         next_state = np.clip(next_state, -3.0, 3.0)
         reward = self.reward_function(self.state, next_state, action, valid, self.previous_action)
         self.previous_action = action
@@ -64,3 +73,13 @@ def _one_hot(action: int) -> np.ndarray:
     values = np.zeros(N_ACTIONS, dtype=np.float32)
     values[action] = 1.0
     return values
+
+
+def _action_effect(action: int) -> np.ndarray:
+    effects = {
+        ACTION_REST: np.array([0.03, -0.06, -0.005, -0.005, -0.05], dtype=np.float32),
+        ACTION_CARDIO: np.array([-0.01, 0.035, 0.0, 0.09, 0.02], dtype=np.float32),
+        ACTION_STRENGTH: np.array([-0.01, 0.04, 0.09, 0.0, 0.025], dtype=np.float32),
+        ACTION_MIXED: np.array([-0.02, 0.055, 0.06, 0.06, 0.035], dtype=np.float32),
+    }
+    return effects[action]

@@ -99,6 +99,25 @@ def save_action_distribution() -> None:
 
 
 def save_project_overview() -> None:
+    reinforce = load_json("reinforce_metrics.json")
+    a2c = load_json("a2c_metrics.json")
+    random = load_json("random_policy_metrics.json")
+    returns = [
+        reinforce.get("evaluation", {}).get("average_return"),
+        a2c.get("evaluation", {}).get("average_return"),
+        random.get("average_return"),
+    ]
+    best_return = max(float(value) for value in returns if value is not None)
+    safety_violations = sum(
+        int(value)
+        for value in [
+            reinforce.get("evaluation", {}).get("safety_violations"),
+            a2c.get("evaluation", {}).get("safety_violations"),
+            random.get("safety_violations"),
+        ]
+        if value is not None
+    )
+
     fig, ax = plt.subplots(figsize=(13, 8))
     fig.patch.set_facecolor("#f4f6f3")
     ax.set_xlim(0, 100)
@@ -122,8 +141,8 @@ def save_project_overview() -> None:
     cards = [
         ("Data mode", "Synthetic fallback"),
         ("LSTM checkpoint", "Available"),
-        ("Best demo return", "1.0101"),
-        ("Safety violations", "0"),
+        ("Best demo return", f"{best_return:.4f}"),
+        ("Safety violations", str(safety_violations)),
     ]
     for index, (label, value) in enumerate(cards):
         x = 5 + index * 23.5

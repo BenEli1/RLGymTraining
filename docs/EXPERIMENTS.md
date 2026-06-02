@@ -28,12 +28,14 @@ Result from local synthetic fallback run:
 | Prepared test sequences | 96 |
 | LSTM final train loss | 0.0798 |
 | LSTM validation loss | 0.1038 |
-| REINFORCE evaluation average return | -4.7550 |
+| REINFORCE evaluation average return | 0.2733 |
 | REINFORCE safety violations | 0 |
-| A2C evaluation average return | 1.0101 |
+| A2C evaluation average return | 0.8064 |
 | A2C safety violations | 0 |
-| Random masked baseline average return | -10.0414 |
+| Random masked baseline average return | -1.9374 |
 | Random masked baseline safety violations | 0 |
+| A2C action distribution | rest 15, cardio 41 |
+| REINFORCE action distribution | rest 13, cardio 33, mixed 10 |
 
 Interpretation: the software pipeline executes end to end and the learned policies can be compared against a random masked policy. A2C performed best in this very small synthetic run, which is plausible because the critic supplies lower-variance TD feedback.
 

@@ -6,7 +6,7 @@ State variables: readiness, fatigue, strength, endurance, soreness. These are no
 
 Action space: `rest`, `cardio`, `strength`, `mixed`.
 
-Reward design: reward progress in strength/endurance/readiness and penalize fatigue increase, high soreness, overload, and invalid unsafe actions.
+Reward design: reward progress in strength/endurance/readiness and penalize fatigue increase, high soreness, overload, invalid unsafe actions, and trivial always-rest behavior.
 
 Episode length: default 28 days in `config/setup.yaml`.
 

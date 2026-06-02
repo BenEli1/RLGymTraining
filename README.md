@@ -46,7 +46,7 @@ uv run ruff format --check .
 Current local validation:
 
 - `uv sync --extra dev --system-certs`: passed
-- `uv run pytest`: 12 passed
+- `uv run pytest`: 13 passed
 - `uv run ruff check .`: passed
 - `uv run ruff format --check .`: passed
 
@@ -125,6 +125,7 @@ uv run python scripts/generate_readme_assets.py
 - [docs/PRD_reinforce.md](docs/PRD_reinforce.md)
 - [docs/PRD_a2c.md](docs/PRD_a2c.md)
 - [docs/EXPERIMENTS.md](docs/EXPERIMENTS.md)
+- [docs/ASSESSMENT_COVERAGE.md](docs/ASSESSMENT_COVERAGE.md)
 - [docs/AI_WORKFLOW.md](docs/AI_WORKFLOW.md)
 - [docs/COST_ANALYSIS.md](docs/COST_ANALYSIS.md)
 - [docs/VERSION_HISTORY.md](docs/VERSION_HISTORY.md)
@@ -135,7 +136,7 @@ Add a new dataset by changing `data.raw_path` and column names in config. Add a 
 
 ## Known Limitations
 
-The current repository does not include a real Kaggle dataset, so local demo runs use synthetic data unless the user provides CSV data. The LSTM world model is compact for coursework and CPU feasibility. Safety constraints are illustrative and not clinically validated. Results from demo data should be described as educational pipeline checks only. On the local synthetic fallback, A2C achieved `1.0101` average evaluation return over two short evaluation episodes, REINFORCE achieved `-4.7550`, and the random masked baseline achieved `-10.0414`; these are pipeline checks, not scientific claims.
+The current repository does not include a real Kaggle dataset, so local demo runs use synthetic data unless the user provides CSV data. The LSTM world model is compact for coursework and CPU feasibility. Safety constraints are illustrative and not clinically validated. Results from demo data should be described as educational pipeline checks only. On the local synthetic fallback, A2C achieved `0.8064` average evaluation return over two short evaluation episodes, REINFORCE achieved `0.2733`, and the random masked baseline achieved `-1.9374`; these are pipeline checks, not scientific claims.
 
 ## References
 

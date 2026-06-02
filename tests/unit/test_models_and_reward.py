@@ -6,6 +6,7 @@ from rl_gym_training.models.actor_critic import ActorCritic, CriticNetwork
 from rl_gym_training.models.lstm_world_model import LSTMWorldModel
 from rl_gym_training.models.policy_network import PolicyNetwork
 from rl_gym_training.rl.action_masking import valid_action_mask
+from rl_gym_training.rl.environment import _action_effect
 from rl_gym_training.rl.reward import RewardFunction
 from rl_gym_training.shared.config import load_config
 
@@ -51,6 +52,17 @@ def test_reward_improves_progress_and_penalizes_invalid_or_unsafe():
     assert safe_reward > unsafe_reward
     assert invalid_reward < safe_reward
     assert np.isfinite(safe_reward)
+
+
+def test_reward_penalizes_trivial_rest_and_action_effects_are_distinct():
+    reward = RewardFunction(load_config().reward)
+    state = np.array([0.5, 0.2, 0.5, 0.5, 0.2], dtype=np.float32)
+    rest_next = state + _action_effect(0)
+    cardio_next = state + _action_effect(1)
+    rest_reward = reward(state, rest_next, action=0, valid_action=True)
+    cardio_reward = reward(state, cardio_next, action=1, valid_action=True)
+    assert cardio_reward > rest_reward
+    assert _action_effect(1)[3] > _action_effect(0)[3]
 
 
 def test_action_mask_blocks_heavy_work_when_fatigued():

@@ -56,6 +56,7 @@ class RewardConfig:
     overload_penalty: float
     invalid_action_penalty: float
     consistency_bonus: float
+    rest_penalty: float
 
 
 @dataclass(frozen=True)

@@ -32,6 +32,8 @@ class RewardFunction:
         reward += self.config.readiness_weight * readiness_delta
         reward -= self.config.fatigue_penalty * max(0.0, fatigue_delta)
         reward -= self.config.overload_penalty * max(0.0, soreness - 0.7)
+        if action == ACTION_REST:
+            reward -= self.config.rest_penalty
         if previous_action is not None and action == previous_action and action != ACTION_REST:
             reward += self.config.consistency_bonus
         if not valid_action:

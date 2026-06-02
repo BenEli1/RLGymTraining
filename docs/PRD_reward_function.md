@@ -9,6 +9,7 @@ It measures safe progress:
 - fatigue increase penalty
 - soreness/overload penalty
 - invalid action penalty
+- small rest penalty to avoid trivial under-training when the state is otherwise safe
 - small consistency bonus for repeated non-rest actions when otherwise safe
 
 Immediate reward can be misleading because one intense workout may look productive today while creating fatigue that hurts future return. The reward balances progress and safety, but it is educational and not medically validated.
