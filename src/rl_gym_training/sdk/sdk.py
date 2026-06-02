@@ -7,6 +7,7 @@ from dataclasses import asdict, dataclass
 from pathlib import Path
 
 import numpy as np
+import torch
 
 from rl_gym_training.data.data_loader import N_ACTIONS, load_workout_data
 from rl_gym_training.data.dataset import WorkoutSequenceDataset
@@ -93,7 +94,22 @@ class RLGymTrainingSDK:
         policy = PolicyNetwork(len(self.config.data.state_columns), N_ACTIONS)
         metrics = run_reinforce_training(policy, env, self.config)
         evaluation = evaluate_policy(policy, env, episodes=2)
-        output = {"training": asdict(metrics), "evaluation": asdict(evaluation)}
+        checkpoint = resolve_path("results/reinforce_policy.pt")
+        checkpoint.parent.mkdir(parents=True, exist_ok=True)
+        torch.save(
+            {
+                "state_dict": policy.state_dict(),
+                "state_size": len(self.config.data.state_columns),
+                "action_size": N_ACTIONS,
+                "config": asdict(self.config),
+            },
+            checkpoint,
+        )
+        output = {
+            "training": asdict(metrics),
+            "evaluation": asdict(evaluation),
+            "checkpoint_path": str(checkpoint),
+        }
         self._write_json("results/reinforce_metrics.json", output)
         return output
 
@@ -102,7 +118,32 @@ class RLGymTrainingSDK:
         model = ActorCritic(len(self.config.data.state_columns), N_ACTIONS)
         metrics = run_a2c_training(model, env, self.config)
         evaluation = evaluate_policy(model.actor, env, episodes=2)
-        output = {"training": asdict(metrics), "evaluation": asdict(evaluation)}
+        actor_checkpoint = resolve_path("results/a2c_actor.pt")
+        critic_checkpoint = resolve_path("results/a2c_critic.pt")
+        actor_checkpoint.parent.mkdir(parents=True, exist_ok=True)
+        torch.save(
+            {
+                "state_dict": model.actor.state_dict(),
+                "state_size": len(self.config.data.state_columns),
+                "action_size": N_ACTIONS,
+                "config": asdict(self.config),
+            },
+            actor_checkpoint,
+        )
+        torch.save(
+            {
+                "state_dict": model.critic.state_dict(),
+                "state_size": len(self.config.data.state_columns),
+                "config": asdict(self.config),
+            },
+            critic_checkpoint,
+        )
+        output = {
+            "training": asdict(metrics),
+            "evaluation": asdict(evaluation),
+            "actor_checkpoint_path": str(actor_checkpoint),
+            "critic_checkpoint_path": str(critic_checkpoint),
+        }
         self._write_json("results/a2c_metrics.json", output)
         return output
 

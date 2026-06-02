@@ -92,6 +92,9 @@ All important hyperparameters live in `config/setup.yaml`: data path, split rati
 
 - `data/processed/train.csv`, `validation.csv`, `test.csv`
 - `results/lstm_world_model.pt`
+- `results/reinforce_policy.pt`
+- `results/a2c_actor.pt`
+- `results/a2c_critic.pt`
 - `results/reinforce_metrics.json`
 - `results/a2c_metrics.json`
 - `results/random_policy_metrics.json`
@@ -106,7 +109,7 @@ Demo LSTM world-model training curve:
 
 ![LSTM training curve](assets/lstm_training_curve.png)
 
-Synthetic fallback policy comparison:
+PMData policy comparison:
 
 ![Policy comparison](assets/policy_comparison.png)
 
