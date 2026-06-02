@@ -42,7 +42,7 @@ Result from local PMData run:
 
 Interpretation: the software pipeline executes end to end on PMData-derived workout sequences and the learned policies can be compared against a random masked policy. REINFORCE achieved the highest return in this compact CPU run, while A2C still beat the random masked baseline and produced zero safety violations.
 
-Limitation: PMData is real, but the RL environment remains an educational learned simulator and not a medical recommendation engine.
+Limitation: PMData is real, but the RL environment remains an educational learned simulator and not a medical recommendation engine. The deterministic A2C evaluation collapsed to a recovery-heavy mix of `rest` and `mixed` in this short run; the README plot compares that policy distribution against the PMData label distribution so this behavior is visible instead of overstated.
 
 ## Additional Comparison Checklist
 

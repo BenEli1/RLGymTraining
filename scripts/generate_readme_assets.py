@@ -13,6 +13,7 @@ ROOT = Path(__file__).resolve().parents[1]
 ASSETS = ROOT / "assets"
 RESULTS = ROOT / "results"
 MANIFEST = ROOT / "data" / "raw" / "pmdata_manifest.json"
+RAW_DATA = ROOT / "data" / "raw" / "workout_sequences.csv"
 
 
 def load_json(name: str) -> dict[str, Any]:
@@ -38,7 +39,7 @@ def save_policy_comparison() -> None:
     fig, ax = plt.subplots(figsize=(9, 4.8))
     bars = ax.barh(labels, values, color=colors, height=0.55)
     ax.axvline(0, color="#17211b", linewidth=1)
-    ax.set_title("Policy Comparison on Synthetic Demo Data", weight="bold")
+    ax.set_title("Policy Comparison on PMData-Derived Environment", weight="bold")
     ax.set_xlabel("Average episode return")
     ax.grid(axis="x", color="#d9dfd8", linewidth=0.8)
     ax.set_axisbelow(True)
@@ -83,17 +84,50 @@ def save_action_distribution() -> None:
     action_names = {"0": "rest", "1": "cardio", "2": "strength", "3": "mixed"}
     a2c = load_json("a2c_metrics.json")
     distribution = a2c.get("evaluation", {}).get("action_distribution", {})
-    values = [int(distribution.get(str(index), 0)) for index in range(4)]
+    a2c_counts = [int(distribution.get(str(index), 0)) for index in range(4)]
+    dataset_counts = load_pmdata_action_counts()
+    a2c_total = max(sum(a2c_counts), 1)
+    dataset_total = max(sum(dataset_counts), 1)
+    a2c_values = [100 * value / a2c_total for value in a2c_counts]
+    dataset_values = [100 * value / dataset_total for value in dataset_counts]
+    labels = [action_names[str(index)] for index in range(4)]
+    x_positions = list(range(4))
+    width = 0.34
 
     fig, ax = plt.subplots(figsize=(9, 4.8))
-    ax.bar([action_names[str(index)] for index in range(4)], values, color="#315f9f", width=0.55)
-    ax.set_title("A2C Evaluation Action Distribution", weight="bold")
-    ax.set_ylabel("Action count")
-    ax.set_ylim(0, max(values + [1]) * 1.18)
+    dataset_bars = ax.bar(
+        [x - width / 2 for x in x_positions],
+        dataset_values,
+        color="#8a9a91",
+        width=width,
+        label="PMData labels",
+    )
+    a2c_bars = ax.bar(
+        [x + width / 2 for x in x_positions],
+        a2c_values,
+        color="#315f9f",
+        width=width,
+        label="A2C deterministic eval",
+    )
+    ax.set_title("Action Distribution: PMData Labels vs A2C Evaluation", weight="bold")
+    ax.set_ylabel("Share of actions (%)")
+    ax.set_xticks(x_positions, labels)
+    ax.set_ylim(0, max(dataset_values + a2c_values + [1]) * 1.25)
     ax.grid(axis="y", color="#d9dfd8", linewidth=0.8)
     ax.set_axisbelow(True)
-    for index, value in enumerate(values):
-        ax.text(index, value + max(values + [1]) * 0.03, str(value), ha="center", weight="bold")
+    ax.legend()
+    label_offset = max(dataset_values + a2c_values + [1]) * 0.03
+    for bars in (dataset_bars, a2c_bars):
+        for bar in bars:
+            value = bar.get_height()
+            ax.text(
+                bar.get_x() + bar.get_width() / 2,
+                value + label_offset,
+                f"{value:.0f}%",
+                ha="center",
+                weight="bold",
+                fontsize=9,
+            )
     fig.tight_layout()
     fig.savefig(ASSETS / "action_distribution.png", dpi=160)
     plt.close(fig)
@@ -197,6 +231,25 @@ def load_manifest() -> dict[str, Any]:
     if not MANIFEST.exists():
         return {}
     return json.loads(MANIFEST.read_text(encoding="utf-8"))
+
+
+def load_pmdata_action_counts() -> list[int]:
+    if not RAW_DATA.exists():
+        return [0, 0, 0, 0]
+    counts = [0, 0, 0, 0]
+    lines = RAW_DATA.read_text(encoding="utf-8").splitlines()
+    if not lines:
+        return counts
+    headers = lines[0].split(",")
+    action_index = headers.index("action")
+    for line in lines[1:]:
+        parts = line.split(",")
+        if len(parts) <= action_index:
+            continue
+        action = int(parts[action_index])
+        if 0 <= action < len(counts):
+            counts[action] += 1
+    return counts
 
 
 def _rounded(
