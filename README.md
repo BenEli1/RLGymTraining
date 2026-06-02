@@ -33,7 +33,10 @@ uv run rl-gym-training train-lstm
 uv run rl-gym-training train-reinforce
 uv run rl-gym-training train-a2c
 uv run rl-gym-training evaluate-random
+uv run rl-gym-training dashboard
 ```
+
+The dashboard opens at `http://127.0.0.1:8765` by default and provides browser buttons for data preparation, LSTM training, REINFORCE, A2C, and random-policy evaluation. It is intentionally implemented as a lightweight web UI rather than Tkinter.
 
 Quality checks:
 
@@ -88,6 +91,16 @@ All important hyperparameters live in `config/setup.yaml`: data path, split rati
 - `results/reinforce_metrics.json`
 - `results/a2c_metrics.json`
 - `results/random_policy_metrics.json`
+
+## Browser Dashboard
+
+The dashboard is the recommended visual demo path for the course submission:
+
+```powershell
+uv run rl-gym-training dashboard
+```
+
+It shows artifact status, average return comparison, loss curves, command output, and the synthetic-data caveat on the first screen. It calls the same SDK as the tests and CLI, so it does not duplicate training logic.
 
 Large generated artifacts are ignored by git.
 

@@ -12,9 +12,23 @@ def main() -> None:
     parser = argparse.ArgumentParser(description="RL Gym Training coursework CLI")
     parser.add_argument(
         "command",
-        choices=["prepare", "train-lstm", "train-reinforce", "train-a2c", "evaluate-random"],
+        choices=[
+            "prepare",
+            "train-lstm",
+            "train-reinforce",
+            "train-a2c",
+            "evaluate-random",
+            "dashboard",
+        ],
     )
+    parser.add_argument("--host", default="127.0.0.1")
+    parser.add_argument("--port", default=8765, type=int)
     args = parser.parse_args()
+    if args.command == "dashboard":
+        from rl_gym_training.web.dashboard import serve_dashboard
+
+        serve_dashboard(host=args.host, port=args.port)
+        return
     sdk = RLGymTrainingSDK()
     if args.command == "prepare":
         prepared = sdk.prepare_data()
