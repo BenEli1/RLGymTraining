@@ -15,7 +15,7 @@ RL mapping:
 | Action | `rest`, `cardio`, `strength`, or `mixed` |
 | Reward | Progress and readiness reward minus fatigue, soreness, overload, invalid-action penalties |
 | Episode | Configurable sequence of training days, default 28 |
-| Policy | Stochastic policy `pi_theta(a|s)` over discrete workout actions |
+| Policy | Stochastic policy `pi_theta(a\|s)`, a probability distribution over workout actions |
 | Return | Discounted cumulative reward |
 | Critic | A2C value estimator `V(s)` |
 
@@ -46,20 +46,21 @@ uv run ruff format --check .
 
 Current local validation:
 
-- `uv sync --extra dev --system-certs`: passed
-- `uv run pytest`: 13 passed
+- `uv sync --extra dev`: failed before dependency sync because the user-level uv cache path already existed as a file
+- `UV_CACHE_DIR=.uv-cache uv sync --extra dev --system-certs`: passed
+- `uv run pytest`: 20 passed
 - `uv run ruff check .`: passed
 - `uv run ruff format --check .`: passed
 
 ## Data
 
-The preferred workflow uses PMData, a real Kaggle-listed sports logging dataset. Download and adapt the needed PMData wellness/sRPE CSV files with:
+The preferred workflow uses PMData, a real Kaggle-listed sports logging dataset. The helper script does not use the Kaggle API. It downloads the needed PMData wellness/sRPE CSV files from the public OSF mirror when network access is available, or transforms matching local files already placed under `data/raw/pmdata/pXX/`:
 
 ```powershell
 uv run python scripts/download_pmdata.py
 ```
 
-This creates `data/raw/workout_sequences.csv` from 16 PMData participants. Required columns are documented in [docs/PRD_data_pipeline.md](docs/PRD_data_pipeline.md). Synthetic fallback exists only for tests and explicit demo use; it is disabled in the default config.
+This creates `data/raw/workout_sequences.csv` from the discovered PMData participants. The committed local run used 16 participants. If the OSF mirror is unavailable, manually download PMData from Kaggle or OSF, place files like `data/raw/pmdata/p01/wellness.csv` and optional `data/raw/pmdata/p01/srpe.csv`, then rerun the command above and `uv run rl-gym-training prepare`. Required columns are documented in [docs/PRD_data_pipeline.md](docs/PRD_data_pipeline.md). Synthetic fallback exists only for tests and explicit demo use; it is disabled in the default config.
 
 Processed chronological splits are saved under `data/processed/`. Scaling is fitted only on training rows and then applied to validation/test rows.
 
@@ -123,6 +124,8 @@ These images are generated from the current demo metrics and project workflow. T
 uv run python scripts/generate_readme_assets.py
 ```
 
+The first and tuned PMData runs are compared in [docs/EXPERIMENTS.md](docs/EXPERIMENTS.md), including the original A2C `rest`/`mixed` behavior and the later tuned action distribution.
+
 ## Documentation
 
 - [docs/PRD.md](docs/PRD.md)
@@ -147,7 +150,7 @@ Add a new dataset by changing `data.raw_path` and column names in config. Add a 
 
 ## Known Limitations
 
-The project now uses PMData for the local experiment evidence, but raw PMData files are not committed because dataset files belong under ignored `data/raw/`. The LSTM world model is compact for coursework and CPU feasibility. Safety constraints are illustrative and not clinically validated. On the local PMData run, REINFORCE achieved `2.4954` average evaluation return, A2C achieved `1.6647`, and the random masked baseline achieved `-0.8265`; all reported policies had zero safety violations. These are educational pipeline checks, not medical or production claims.
+The project now uses PMData for the local experiment evidence, but raw PMData files are not committed because dataset files belong under ignored `data/raw/`. The LSTM world model is compact for coursework and CPU feasibility. Safety constraints are illustrative and not clinically validated. On the local PMData run, REINFORCE achieved `2.4954` average evaluation return, A2C achieved `1.6647`, and the random masked baseline achieved `-0.8265`; all reported policies had zero safety violations. This does not show that REINFORCE is generally better than A2C. The run is small, noisy, lightly tuned, and reward/action-mask design may favor simpler policy updates while the A2C critic may need more tuning. These are educational pipeline checks, not medical or production claims.
 
 ## References
 
