@@ -34,6 +34,7 @@ uv run rl-gym-training train-lstm
 uv run rl-gym-training train-reinforce
 uv run rl-gym-training train-a2c
 uv run rl-gym-training evaluate-random
+uv run rl-gym-training dashboard-tk
 ```
 
 Quality checks:
@@ -122,6 +123,12 @@ These images are generated from the current demo metrics and project workflow. T
 
 ```powershell
 uv run python scripts/generate_readme_assets.py
+```
+
+Open the local Tkinter dashboard with:
+
+```powershell
+uv run rl-gym-training dashboard-tk
 ```
 
 The first and tuned PMData runs are compared in [docs/EXPERIMENTS.md](docs/EXPERIMENTS.md), including the original A2C `rest`/`mixed` behavior and the later tuned action distribution.

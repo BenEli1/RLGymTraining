@@ -16,9 +16,16 @@ def main() -> None:
             "train-reinforce",
             "train-a2c",
             "evaluate-random",
+            "dashboard-tk",
         ],
     )
     args = parser.parse_args()
+
+    if args.command == "dashboard-tk":
+        from rl_gym_training.ui.tk_dashboard import launch_dashboard
+
+        launch_dashboard()
+        return
 
     from rl_gym_training.sdk import RLGymTrainingSDK
 
