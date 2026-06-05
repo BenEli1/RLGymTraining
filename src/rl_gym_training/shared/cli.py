@@ -24,7 +24,11 @@ def main() -> None:
     if args.command == "dashboard-tk":
         from rl_gym_training.ui.tk_dashboard import launch_dashboard
 
-        launch_dashboard()
+        print("Opening Tkinter dashboard. Close the dashboard window to return to PowerShell.")
+        try:
+            launch_dashboard()
+        except KeyboardInterrupt:
+            print("Dashboard closed.")
         return
 
     from rl_gym_training.sdk import RLGymTrainingSDK

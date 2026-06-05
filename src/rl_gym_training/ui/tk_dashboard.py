@@ -5,7 +5,7 @@ from __future__ import annotations
 import json
 import tkinter as tk
 from pathlib import Path
-from tkinter import ttk
+from tkinter import messagebox, ttk
 from typing import Any
 
 from rl_gym_training.data.data_loader import ACTION_NAMES
@@ -47,6 +47,10 @@ def launch_dashboard() -> None:
     root.title("RLGymTraining Dashboard")
     root.geometry("1120x760")
     root.minsize(980, 680)
+    root.protocol("WM_DELETE_WINDOW", root.destroy)
+    root.bind("<Escape>", lambda _event: root.destroy())
+    root.bind("<Control-q>", lambda _event: root.destroy())
+    root.report_callback_exception = _show_callback_error
 
     style = ttk.Style(root)
     style.theme_use("clam")
@@ -65,6 +69,7 @@ def launch_dashboard() -> None:
         text="PMData results viewer for the LSTM world model, REINFORCE, A2C, and random baseline.",
         style="Subtitle.TLabel",
     ).pack(anchor="w", pady=(2, 0))
+    ttk.Button(header, text="Close", command=root.destroy).pack(anchor="e")
 
     notebook = ttk.Notebook(root)
     notebook.pack(fill="both", expand=True, padx=18, pady=12)
@@ -80,7 +85,26 @@ def launch_dashboard() -> None:
     _build_metrics(metrics_tab, data)
     _build_plots(plots_tab, data)
 
+    status = ttk.Label(
+        root,
+        text="Dashboard ready. Use the tabs above; close with the Close button, window X, Escape, or Ctrl+Q.",
+        anchor="w",
+        padding=(18, 6),
+    )
+    status.pack(fill="x")
+    root.after(100, lambda: _bring_to_front(root))
     root.mainloop()
+
+
+def _bring_to_front(root: tk.Tk) -> None:
+    root.lift()
+    root.focus_force()
+    root.attributes("-topmost", True)
+    root.after(700, lambda: root.attributes("-topmost", False))
+
+
+def _show_callback_error(error_type, error_value, _traceback) -> None:
+    messagebox.showerror("Dashboard error", f"{error_type.__name__}: {error_value}")
 
 
 def _build_overview(parent: ttk.Frame, data: dict[str, Any]) -> None:
